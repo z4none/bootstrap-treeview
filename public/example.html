@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap Tree View</title>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-treeview.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bootstrap Tree View</h1>
+        <br/>
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="treeview"></label>
+                <div id="treeview"></div>
+                <div class="input-group">
+                    <select id="node-id" class="form-control">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button id="btn-select" class="btn btn-default" type="button">select</button>
+                        <button id="btn-add" class="btn btn-default" type="button">add</button>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="./js/jquery-3.1.1.min.js"></script>
+    <script src="./js/bootstrap-treeview.js"></script>
+    <script type="text/javascript">
+        function getData() {
+            var data = [
+                {
+                    text: 'Parent 1, Id=1',
+                    id: 1,
+                    nodeId: 999,
+                    nodeId1: 999,
+                    nodes: [
+                        {
+                            text: 'Child 1, Id=4',
+                            id: 4,
+                        },
+                        {
+                            text: 'Child 2, Id=5',
+                            id: 5,
+                        }
+                    ]
+                },
+                {
+                    text: 'Parent 2, Id=2',
+                    id: 2,
+                },
+                {
+                    text: 'Parent 3, Id=3',
+                    id: 3,
+                },
+            ];
+
+            return data;
+        }
+
+        $(function () {
+            var options = {
+                data: getData()
+            };
+
+            $('#treeview').treeview(options);
+
+            $("#btn-select").click(function(){
+                var nodeId = $("#node-id").val();
+                var nodes = $('#treeview').treeview("filter", function (node) {
+                    return (node.id == nodeId);
+                });
+
+                $(nodes).each(function(i, node){
+                    $('#treeview').treeview("selectNode", node);
+                })
+            });
+
+            $("#btn-add").click(function(){
+                var nodes = $('#treeview').treeview("getSelected");
+                var nodeId = nodes.length ? nodes[0].nodeId: null;
+                $('#treeview').treeview("addNode", [nodeId, {
+                    text: 'i am a new node!!!',
+                    id: 9999                   
+                }]);
+            })
+        });
+    </script>
+</body>

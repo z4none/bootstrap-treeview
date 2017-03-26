@@ -112,6 +112,7 @@
 			getUnchecked: $.proxy(this.getUnchecked, this),
 			getDisabled: $.proxy(this.getDisabled, this),
 			getEnabled: $.proxy(this.getEnabled, this),
+			getNodes: $.proxy(this.getNodes, this),
 
 			// Select methods
 			selectNode: $.proxy(this.selectNode, this),
@@ -1181,6 +1182,11 @@
 				return val.match(new RegExp(pattern, modifier));
 			}
 		});
+	};
+
+	Tree.prototype.getNodes = function (func) {
+		var _this = this;
+		return $.grep(this.nodes, func);
 	};
 
 	/**
