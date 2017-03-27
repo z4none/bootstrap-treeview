@@ -143,7 +143,11 @@
 
 			// Search methods
 			search: $.proxy(this.search, this),
-			clearSearch: $.proxy(this.clearSearch, this)
+			clearSearch: $.proxy(this.clearSearch, this),
+
+			//
+			filter: $.proxy(this.filter, this),
+			addNode: $.proxy(this.addNode, this),
 		};
 	};
 
@@ -1184,10 +1188,6 @@
 		});
 	};
 
-	Tree.prototype.getNodes = function (func) {
-		var _this = this;
-		return $.grep(this.nodes, func);
-	};
 
 	/**
 		Recursive find for retrieving nested attributes values
@@ -1211,6 +1211,39 @@
 				return undefined;
 			}
 		}
+	};
+
+	//
+	Tree.prototype.filter = function (func) {
+		return $.grep(this.nodes, func);
+	};
+
+	//
+    Tree.prototype.addNode = function (parent, node) {
+		if(typeof parent === "object" && parent !== null) {
+            parent = parent.nodeId;
+		}
+		
+		if(typeof node == "string") {
+            node = JSON.stringify(node);
+		}
+
+        if(parent == null) {
+    		this.tree.push(node);
+		}
+		else {
+    		var parentNode = this.getNode(parent);
+    		if(typeof parentNode.nodes == "undefined") {
+                parentNode.nodes = [];
+    		}
+
+    		parentNode.nodes.push(node);
+    		parentNode.state.expanded = true;
+		}
+		
+
+		this.setInitialStates({ nodes: this.tree }, 0);
+		this.render();		
 	};
 
 	var logError = function (message) {
